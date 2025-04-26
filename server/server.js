@@ -11,8 +11,10 @@ const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
 
+// Allowed origins for CORS
 const allowedOrigins = ['http://localhost:5173', 'https://mern-auth-pi-peach.vercel.app'];
 
+// CORS options
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -21,23 +23,24 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],  // Explicitly allow Content-Type and Authorization headers
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,  // Allow cookies and credentials to be sent
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],  // Allow headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allowed methods
 };
 
-app.use(cors(corsOptions));
-
-app.use(express.json());
-app.use(cookieParser());
-
-// API ENDPOINTS
-app.get('/', (req, res) => res.send("API Working"));
+// Middleware setup
+app.use(cors(corsOptions));  // Use CORS with options
+app.use(express.json());      // Parse JSON request bodies
+app.use(cookieParser());      // Parse cookies
 
 // Public routes (no authentication required)
 app.use('/api/auth', authRouter);
 
 // Protected routes (authentication required)
-app.use('/api/user', userAuth, userRouter);  // Apply the userAuth middleware here
+app.use('/api/user', userAuth, userRouter);  // Apply userAuth middleware here
 
+// Test route
+app.get('/', (req, res) => res.send("API Working"));
+
+// Start the server
 app.listen(port, () => console.log(`Server started on PORT: ${port}`));

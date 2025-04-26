@@ -224,7 +224,7 @@ export const register = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: process.env.NODE_ENV ===  'None',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
         // Allow the token to be sent across all routes
@@ -265,7 +265,7 @@ export const login = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: process.env.NODE_ENV === 'None',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
        // Allow the token to be sent across all routes
@@ -282,7 +282,7 @@ export const logout = async (req, res) => {
     res.clearCookie('token', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: process.env.NODE_ENV ==='None',
       path: '/',  // Allow the token to be cleared across all routes
     });
 
