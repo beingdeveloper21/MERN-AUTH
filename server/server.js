@@ -8,28 +8,32 @@ import userRouter from './routes/userRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 4000;
+
+// Connect to MongoDB
 connectDB();
 
+// CORS Configuration
 const allowedOrigins = ['http://localhost:5173', 'https://mern-auth-pi-peach.vercel.app'];
 
-app.use(express.json());
-app.use(cookieParser());
-
-// Correct CORS setup
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
+    if (!origin) return callback(null, true); // allow requests with no origin (like Postman or Curl)
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      return callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
 }));
 
-// API routes
-app.get('/', (req, res) => res.send("API Working"));
+app.use(express.json());
+app.use(cookieParser());
+
+// API Routes
+app.get('/', (req, res) => res.send("API Working ✅"));
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 
-app.listen(port, () => console.log(`Server started on PORT:${port}`));
+// Start Server
+app.listen(port, () => console.log(`🚀 Server running on PORT: ${port}`));
