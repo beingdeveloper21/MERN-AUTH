@@ -10,11 +10,24 @@ import userRouter from './routes/userRoutes.js'
 const app=express();
 const port=process.env.PORT||4000
 connectDB();
-const allowedOrigins=['http://localhost:5173','https://mern-auth-pi-peach.vercel.app',  ]
+const allowedOrigins = ['http://localhost:5173', 'https://mern-auth-pi-peach.vercel.app'];
+
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin:allowedOrigins  ,credentials:true}))
 //API ENDPOINTS
 app.get('/',(req,res)=>
     res.send("API Working"));
