@@ -10,21 +10,15 @@ const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
 
-// Allowed Origins for CORS
 const allowedOrigins = ['http://localhost:5173', 'https://mern-auth-pi-peach.vercel.app'];
 
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS Configuration (allow credentials and specific origins)
+// Correct CORS setup
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,  // Allow cookies to be sent
-}));
-
-// API Endpoints
-app.get('/', (req, res) => res.send("API Working"));
-app.use('/api/auth', authRouter);
-app.use('/api/user', userRouter);
-
-app.listen(port, () => console.log(`Server started on PORT:${port}`));
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not
