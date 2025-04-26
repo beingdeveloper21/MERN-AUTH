@@ -16,19 +16,34 @@ export const AppContextProvider=(props)=>{
 
 
 
-    const getAuthState=async()=>{
-try{
-const {data}=await axios.get(backendURL + '/api/auth/is-auth')
-if(data.success){
-    setIsLoggedin(true)
-    getUserData()
-}
-}
-catch(error){
-    toast.error(error.message)
-}
+//     const getAuthState=async()=>{
+// try{
+// const {data}=await axios.get(backendURL + '/api/auth/is-auth')
+// if(data.success){
+//     setIsLoggedin(true)
+//     getUserData()
+// }
+// }
+// catch(error){
+//     toast.error(error.message)
+// }
 
+//     }
+const getAuthState = async () => {
+    try {
+      const { data } = await axios.get(backendURL + '/api/auth/is-auth');
+      if (data.success) {
+        setIsLoggedin(true);
+        getUserData();
+      }
+    } catch (error) {
+      // if it's a 401, that just means “not logged in yet”—so ignore it
+      if (error.response?.status !== 401) {
+        toast.error(error.message);
+      }
     }
+  };
+  
      const getUserData=async()=>{
          try{
            const {data}= await axios.get(backendURL + '/api/user/data')
