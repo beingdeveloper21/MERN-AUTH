@@ -21,4 +21,15 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
+// API routes
+app.get('/', (req, res) => res.send("API Working"));
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+
+app.listen(port, () => console.log(`Server started on PORT:${port}`));
