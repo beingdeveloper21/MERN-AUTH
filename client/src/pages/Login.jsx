@@ -13,30 +13,53 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // const onSubmitHandler = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     let response, data;
+
+  //     if (state === 'Sign Up') {
+  //       response = await axios.post(
+  //         `${backendURL}/api/auth/register`,
+  //         { name, email, password },
+  //         { withCredentials: true }
+  //       );
+  //     } else {
+  //       response = await axios.post(
+  //         `${backendURL}/api/auth/login`,
+  //         { email, password },
+  //         { withCredentials: true }
+  //       );
+  //     }
+
+  //     data = response.data;
+
+  //     if (data.success) {
+  //       setIsLoggedin(true);
+  //       await getUserData();
+  //       navigate('/');
+  //     } else {
+  //       toast.error(data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      let response, data;
-
+      let data;
       if (state === 'Sign Up') {
-        response = await axios.post(
-          `${backendURL}/api/auth/register`,
-          { name, email, password },
-          { withCredentials: true }
-        );
+        const response = await axios.post(backendURL + '/api/auth/register', { name, email, password }, { withCredentials: true });
+        data = response.data;
       } else {
-        response = await axios.post(
-          `${backendURL}/api/auth/login`,
-          { email, password },
-          { withCredentials: true }
-        );
+        const response = await axios.post(backendURL + '/api/auth/login', { email, password }, { withCredentials: true });
+        data = response.data;
       }
-
-      data = response.data;
-
+  
       if (data.success) {
         setIsLoggedin(true);
-        await getUserData();
+        getUserData();
         navigate('/');
       } else {
         toast.error(data.message);
@@ -45,7 +68,7 @@ const Login = () => {
       toast.error(error.message);
     }
   };
-
+  
   return (
     <div className='flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-br from-blue-200 to-purple-400'>
       <img
