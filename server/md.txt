@@ -1,0 +1,49 @@
+Whenever the project is started with nodemon server.js it automatically restarts the project whenever we make any changes.
+Then go on to mongodbAtlas on chrome and create account and then create a cluster deploy and create database user.
+GO to clusters=>connect button=>compass
+fetch MONGODB_URI and then go to Network Access delete current IP address  and add IP address to allow access from any anywhere.
+With this we can connect with database from any IP address
+Create a dotenv file this file stores environment variables and then MONGODB_URI and paste the string we fecthed from MongodbAtlas remove / from last write password which you wrote while creating database user in Atlas.
+
+
+In mongodb.js
+  await mongoose.connect(`${process.env.MONGODB_URI}/MERN-AUTH`)
+  await mongoose.connect(`${Accessing environment variable}/Name of Project`)
+export default connectDB  enables us to use the function in other file also 
+
+Now this connectDB function is first imported in server.js then function is called.
+This enables us for a successfull connection b/w express app and mongodb database.
+
+We need to store users data in database
+
+userModel.js->Here we create user's model that is stored in database,then create a schema using mongoose in schema we deifine structure of user's data in emailid it is unique because multiple users cannot have same email id
+defaault value means that when a new user is created its default value will be as mentioned.
+for example userisNotVerified when a new user is created
+Then create a user model with name user and the above schema.
+If user model is available with name 'user' then ok else created then export usermodel from this file.
+So that we can use this userModel in other files to store userdata in Mongodb database. 
+
+We create API end point using controller function.
+
+ 
+In usermodel.js 
+First create controller function for registration
+first we fetch name,email and password from req.body 
+if any of the three is not present we return missing details also success is false because no new user is created.
+then we find whether any existing user exists with that email then also success is false because no new user is created and message is user already exists.
+then password is hashed using bcrypt and a new user is created and saved in database.
+now token is generted using JWT for authentication 
+id is generated for a new user in mongodb that id is used to create token create JWT secret key an environment variable and also provide expiry time
+we will send this token to response using cookie
+and create object with properties that only httprequest can access project for liveserver secure->true for local server->secure false so create an environment variable
+sameSite strict for localServer because both frontend and backend  in localServer for production environment null so create an environment variable
+maxAge is the expiry time converted 7 days in milliseconds
+
+Then create controller function for login where first we fetch email and password from req.body
+If either of email or password is missing then success is false because we cannot login also dispalying the message thatdetails are  missing
+Then we use try and catch block so we check whether  user exists with that email and if not then success is false and message is displayed Invalid email
+Also then we find password and compare with the password stored in database and then if such password does not exists then success false login not possible and message displayed Invalid password
+If we get both correctly then we generate JWT token and send to response using cookie and enable succes as true
+
+Then create a controller function for logout and here we need to clear cookie to remove token from response by providing cookie name and other properties like httpOnly secure sameSite 
+In authRouter.js we first create router using express router then create API end points using controller function.
