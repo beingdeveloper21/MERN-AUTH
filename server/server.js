@@ -11,36 +11,28 @@ const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
 
-// Allowed origins for CORS
+// Allow these origins
 const allowedOrigins = ['http://localhost:5173', 'https://mern-auth-pi-peach.vercel.app'];
 
-// CORS options
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,  // Allow cookies and credentials to be sent
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],  // Allow headers
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allowed methods
-};
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        } else {
+            return callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+}));
 
-// Middleware setup
-app.use(cors(corsOptions));  // Use CORS with options
-app.use(express.json());      // Parse JSON request bodies
-app.use(cookieParser());      // Parse cookies
+app.use(express.json());
+app.use(cookieParser());
 
-// Public routes (no authentication required)
-app.use('/api/auth', authRouter);
-
-// Protected routes (authentication required)
-app.use('/api/user', userAuth, userRouter);  // Apply userAuth middleware here
-
-// Test route
+// API Routes
 app.get('/', (req, res) => res.send("API Working"));
 
-// Start the server
-app.listen(port, () => console.log(`Server started on PORT: ${port}`));
+app.use('/api/auth', authRouter);
+app.use('/api/user', userAuth, userRouter);
+
+app.listen(port, () => console.log(`Server running on port ${port}`));
