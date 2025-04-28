@@ -12,7 +12,7 @@ const port = process.env.PORT || 4000;
 connectDB();
 
 // Allow these origins
-const allowedOrigins = ['http://localhost:5173', 'https://mern-auth-pi-peach.vercel.app'];
+const allowedOrigins = ['http://localhost:5173', 'https://mern-auth-pi-peach.vercel.app',  'https://mern-auth-1-n9hd.onrender.com'];
 
 app.use(cors({
     origin: allowedOrigins,
