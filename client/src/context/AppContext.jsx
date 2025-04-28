@@ -43,16 +43,18 @@ const getAuthState = async () => {
       }
     }
   };
-  
-     const getUserData=async()=>{
-         try{
-           const {data}= await axios.get(backendURL + '/api/user/data')
-           data.success ? setUserData(data.userData) : toast.error(data.message)
-         }
-         catch(error){
-             toast.error(error.message)
-         }
-     }
+  const getUserData = async () => {
+    try {
+        const { data } = await axios.get(backendURL + '/api/user/data', {
+            withCredentials: true
+        });
+        data.success ? setUserData(data.userData) : toast.error(data.message);
+    } catch (error) {
+        const errorMessage = error.response?.data?.message || 'An error occurred while fetching user data.';
+        toast.error(errorMessage);
+    }
+};
+
     // const getUserData = async () => {
     //     try {
     //         const { data } = await axios.get(backendURL + '/api/user/data');
